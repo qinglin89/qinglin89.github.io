@@ -1,14 +1,14 @@
 ---
 layout: page
 title: Compliance-Native L1
-description: A Hong Kong–regulated, compliance-native Layer 1 for stablecoin issuance and real-world-asset tokenization.
+description: A compliance-native Layer 1 for stablecoin issuance and real-world-asset tokenization.
 img: assets/img/projects/hkchain-cover.jpg
 importance: 2
 category: work
 related_publications: false
 ---
 
-HKChain is a Hong Kong–regulated, compliance-native Layer 1, built on the Cosmos SDK with
+HKChain is a compliance-native Layer 1 aligned with Hong Kong's stablecoin regulatory framework, built on the Cosmos SDK with
 EVM compatibility and aimed at regulated stablecoin issuance and real-world-asset (RWA)
 tokenization. I contribute to its technical architecture.
 
