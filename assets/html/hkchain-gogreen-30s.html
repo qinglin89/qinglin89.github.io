@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HKChain × GoGreen — A Device's Day</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+  :root{
+    --navy:#1A3A6E;
+    --navy-deep:#0F2547;
+    --navy-soft:#2B5499;
+    --teal:#1FA8A0;
+    --gold:#E0A93B;
+    --green:#3FA76A;
+    --coral:#D9684A;
+    --ink:#1F2328;
+    --paper:#F7F9FC;
+    --hilite:#EAF1FB;
+    --line:#D1D9E0;
+    --white:#FFFFFF;
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%;background:#0a1626;font-family:'Sora',sans-serif;overflow:hidden}
+
+  /* 16:9 stage, scales to viewport */
+  #stage{
+    position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+    width:1280px;height:720px;
+    background:
+      radial-gradient(1200px 600px at 80% -10%, #1c3257 0%, transparent 60%),
+      radial-gradient(900px 500px at 0% 110%, #14263f 0%, transparent 55%),
+      linear-gradient(160deg,#0F2547 0%,#0a1626 100%);
+    border-radius:14px;overflow:hidden;
+    box-shadow:0 30px 90px rgba(0,0,0,.6);
+    color:var(--white);
+  }
+
+  /* subtle grain + grid texture */
+  #stage::before{
+    content:"";position:absolute;inset:0;
+    background-image:
+      linear-gradient(rgba(255,255,255,.022) 1px,transparent 1px),
+      linear-gradient(90deg,rgba(255,255,255,.022) 1px,transparent 1px);
+    background-size:48px 48px;
+    mask-image:radial-gradient(circle at 50% 45%,black 0%,transparent 85%);
+    pointer-events:none;
+  }
+
+  /* ---------- header / footer chrome ---------- */
+  .brand{position:absolute;top:30px;left:40px;display:flex;align-items:center;gap:12px;z-index:30}
+  .brand .dot{width:11px;height:11px;border-radius:50%;background:var(--teal);box-shadow:0 0 14px var(--teal)}
+  .brand .name{font-weight:800;font-size:18px;letter-spacing:.5px}
+  .brand .name span{color:var(--teal)}
+  .tagline{position:absolute;top:34px;right:40px;font-family:'JetBrains Mono',monospace;font-size:11px;color:#7C90B0;letter-spacing:1px;z-index:30}
+
+  .progress{position:absolute;bottom:0;left:0;height:3px;background:linear-gradient(90deg,var(--teal),var(--gold));width:0;z-index:40;box-shadow:0 0 12px rgba(31,168,160,.6)}
+
+  .chapter{position:absolute;bottom:26px;left:40px;display:flex;gap:9px;z-index:30}
+  .chapter .seg{width:46px;height:4px;border-radius:3px;background:rgba(255,255,255,.14);transition:background .4s}
+  .chapter .seg.on{background:var(--teal)}
+  .chapter .seg.done{background:rgba(31,168,160,.45)}
+
+  .step-label{position:absolute;bottom:22px;right:40px;font-family:'JetBrains Mono',monospace;font-size:12px;color:#8EA2C2;letter-spacing:1px;z-index:30}
+  .step-label b{color:var(--gold)}
+
+  /* ---------- scenes ---------- */
+  .scene{position:absolute;inset:0;opacity:0;transition:opacity .7s ease;display:flex;align-items:center;justify-content:center;z-index:10}
+  .scene.active{opacity:1;z-index:20}
+
+  .scene-title{position:absolute;top:120px;left:0;right:0;text-align:center;z-index:25}
+  .scene-title .k{font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:3px;color:var(--teal);text-transform:uppercase;opacity:0;transform:translateY(8px);transition:all .6s}
+  .scene-title .t{font-size:34px;font-weight:800;margin-top:8px;opacity:0;transform:translateY(12px);transition:all .6s .1s}
+  .scene-title .s{font-size:16px;font-weight:400;color:#AFC0DC;margin-top:10px;opacity:0;transform:translateY(12px);transition:all .6s .2s}
+  .scene.active .scene-title .k,
+  .scene.active .scene-title .t,
+  .scene.active .scene-title .s{opacity:1;transform:translateY(0)}
+
+  /* central device card */
+  .device{position:relative;width:230px;height:230px;border-radius:24px;
+    background:linear-gradient(150deg,#1d3b66,#15294a);
+    border:1px solid rgba(120,160,220,.35);
+    box-shadow:0 20px 60px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.08);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;z-index:15}
+  .device .ico{font-size:62px;line-height:1}
+  .device .dlabel{font-family:'JetBrains Mono',monospace;font-size:12px;color:#9DB4D8;letter-spacing:1px}
+  .device .did{font-family:'JetBrains Mono',monospace;font-size:10px;color:#6B82A8}
+  .device .pulse{position:absolute;inset:-2px;border-radius:24px;border:2px solid var(--teal);opacity:0;animation:none}
+  @keyframes ring{0%{transform:scale(1);opacity:.7}100%{transform:scale(1.35);opacity:0}}
+
+  /* readout counter */
+  .readout{position:absolute;font-family:'JetBrains Mono',monospace;text-align:center;z-index:18}
+  .readout .val{font-size:38px;font-weight:700;color:var(--white)}
+  .readout .unit{font-size:14px;color:#9DB4D8;margin-top:2px;letter-spacing:1px}
+
+  /* floating token chips */
+  .token{position:absolute;display:flex;align-items:center;gap:8px;padding:11px 17px;border-radius:30px;
+    font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:600;
+    backdrop-filter:blur(6px);opacity:0;z-index:16;white-space:nowrap;
+    box-shadow:0 10px 30px rgba(0,0,0,.35)}
+  .token .b{width:9px;height:9px;border-radius:50%}
+  .tok-carbon{background:rgba(63,167,106,.16);border:1px solid rgba(63,167,106,.6);color:#8FE0AE}
+  .tok-carbon .b{background:var(--green);box-shadow:0 0 10px var(--green)}
+  .tok-ggd{background:rgba(224,169,59,.15);border:1px solid rgba(224,169,59,.6);color:#F2CE84}
+  .tok-ggd .b{background:var(--gold);box-shadow:0 0 10px var(--gold)}
+  .tok-hkd{background:rgba(31,168,160,.16);border:1px solid rgba(31,168,160,.6);color:#83DAD4}
+  .tok-hkd .b{background:var(--teal);box-shadow:0 0 10px var(--teal)}
+
+  /* connectors / flow lines */
+  svg.wires{position:absolute;inset:0;width:100%;height:100%;z-index:12;pointer-events:none}
+  .wire{fill:none;stroke-width:2;stroke-dasharray:6 8;opacity:0}
+  .flowdot{opacity:0}
+
+  /* parallel-mint emphasis */
+  .parallel-note{position:absolute;bottom:140px;left:0;right:0;text-align:center;z-index:22}
+  .parallel-note .chip{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:13px;
+    padding:8px 18px;border-radius:24px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.18);
+    color:#CFE0F5;letter-spacing:.5px;opacity:0;transition:all .6s}
+  .parallel-note .chip b{color:var(--gold)}
+  .scene.active .parallel-note .chip{opacity:1}
+
+  /* node lattice for final scene */
+  .lattice{position:absolute;inset:0;z-index:11}
+  .node{position:absolute;width:13px;height:13px;border-radius:50%;background:#27496f;border:1px solid rgba(120,160,220,.4);opacity:0}
+  .node.lit{background:var(--teal);box-shadow:0 0 16px var(--teal);border-color:var(--teal)}
+
+  /* closing */
+  #closing{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    opacity:0;z-index:50;transition:opacity .8s;text-align:center;
+    background:radial-gradient(800px 500px at 50% 40%,rgba(31,168,160,.12),transparent 70%)}
+  #closing .lock{font-size:15px;font-family:'JetBrains Mono',monospace;letter-spacing:3px;color:var(--teal);text-transform:uppercase;opacity:0;transform:translateY(10px)}
+  #closing h1{font-size:52px;font-weight:800;margin-top:14px;letter-spacing:-.5px;opacity:0;transform:translateY(14px)}
+  #closing h1 span{color:var(--teal)}
+  #closing p{font-size:18px;color:#B7C7E0;margin-top:16px;max-width:640px;line-height:1.5;opacity:0;transform:translateY(14px)}
+  #closing .stamps{display:flex;gap:14px;margin-top:30px;opacity:0;transform:translateY(14px)}
+  #closing .stamp{font-family:'JetBrains Mono',monospace;font-size:12px;padding:9px 16px;border-radius:20px;
+    background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.16);color:#9DB4D8;letter-spacing:.5px}
+  #closing.show .lock{opacity:1;transform:translateY(0);transition:all .7s}
+  #closing.show h1{opacity:1;transform:translateY(0);transition:all .7s .15s}
+  #closing.show p{opacity:1;transform:translateY(0);transition:all .7s .3s}
+  #closing.show .stamps{opacity:1;transform:translateY(0);transition:all .7s .5s}
+
+  /* sun rays */
+  .sun{position:absolute;width:120px;height:120px;border-radius:50%;
+    background:radial-gradient(circle,#FFD66B,#E0A93B);box-shadow:0 0 60px rgba(224,169,59,.7);z-index:14;opacity:0}
+  .ray{position:absolute;width:3px;height:34px;background:linear-gradient(var(--gold),transparent);border-radius:3px;opacity:.0;transform-origin:bottom center}
+
+  /* replay button */
+  #replay{position:absolute;bottom:60px;left:50%;transform:translateX(-50%);z-index:60;
+    font-family:'Sora',sans-serif;font-size:14px;font-weight:600;color:#0F2547;background:var(--teal);
+    border:none;padding:12px 24px;border-radius:30px;cursor:pointer;display:none;
+    box-shadow:0 12px 40px rgba(31,168,160,.5)}
+  #replay:hover{background:#27c0b7}
+</style>
+</head>
+<body>
+<div id="stage">
+  <div class="brand"><div class="dot"></div><div class="name">HK<span>Chain</span> × GoGreen</div></div>
+  <div class="tagline">A DEVICE'S DAY ON-CHAIN</div>
+
+  <!-- SVG wires layer (shared) -->
+  <svg class="wires" id="wires" viewBox="0 0 1280 720"></svg>
+
+  <!-- SCENE 1: solar generation -->
+  <div class="scene" id="s1">
+    <div class="scene-title"><div class="k">06:00 · Sunrise</div><div class="t">A solar panel starts producing</div><div class="s">Verified green energy, metered on-chain</div></div>
+    <div class="sun" id="sun"></div>
+    <div class="device" id="dev1">
+      <div class="pulse"></div>
+      <div class="ico">🔆</div>
+      <div class="dlabel">SOLAR ARRAY</div>
+      <div class="did">device #GG-0427</div>
+    </div>
+    <div class="readout" id="kwh" style="bottom:185px">
+      <div class="val">0</div><div class="unit">kWh GENERATED</div>
+    </div>
+  </div>
+
+  <!-- SCENE 2: carbon credit NFT -->
+  <div class="scene" id="s2">
+    <div class="scene-title"><div class="k">Attested by PAM</div><div class="t">Each clean kWh mints a carbon credit</div><div class="s">A verifiable NFT — tradable, retireable for ESG</div></div>
+    <div class="device"><div class="ico">🔆</div><div class="dlabel">SOLAR ARRAY</div><div class="did">device #GG-0427</div></div>
+    <div class="token tok-carbon" id="tk-carbon" style="top:255px;left:730px"><span class="b"></span>CARBON-CREDIT · NFT</div>
+    <div class="readout" id="co2" style="top:430px;left:760px">
+      <div class="val" style="font-size:30px;color:#8FE0AE">+0.50</div><div class="unit">tCO₂e AVOIDED</div>
+    </div>
+  </div>
+
+  <!-- SCENE 3: parallel GGD mint -->
+  <div class="scene" id="s3">
+    <div class="scene-title"><div class="k">Protocol issuance</div><div class="t">The same activity also releases GGD</div><div class="s">Parallel minting — the credit drives issuance, but is never consumed</div></div>
+    <div class="device" style="transform:scale(.85)"><div class="ico">🔆</div><div class="dlabel">SOLAR ARRAY</div><div class="did">#GG-0427</div></div>
+    <div class="token tok-carbon" id="p-carbon" style="top:300px;left:735px"><span class="b"></span>CARBON-CREDIT · kept</div>
+    <div class="token tok-ggd" id="p-ggd" style="top:380px;left:735px"><span class="b"></span>GGD · device_pool 70%</div>
+    <div class="parallel-note"><div class="chip">two independent assets from <b>one</b> physical action — not a swap</div></div>
+  </div>
+
+  <!-- SCENE 4: HKD settlement -->
+  <div class="scene" id="s4">
+    <div class="scene-title"><div class="k">18:30 · An EV pulls in</div><div class="t">The charging session settles in HKD stablecoin</div><div class="s">Real revenue, instant on-chain settlement to the device beneficiary</div></div>
+    <div class="device"><div class="ico">🔌</div><div class="dlabel">EV CHARGER</div><div class="did">device #GG-0427</div></div>
+    <div class="token tok-hkd" id="tk-hkd" style="top:270px;left:735px"><span class="b"></span>HKD · stablecoin</div>
+    <div class="token tok-carbon" id="tk-c2" style="top:355px;left:735px"><span class="b"></span>+ carbon attribution</div>
+    <div class="readout" id="hkd" style="bottom:175px">
+      <div class="val" style="color:#83DAD4">HK$ 0</div><div class="unit">SETTLED · two-sided revenue</div>
+    </div>
+  </div>
+
+  <!-- SCENE 5: device as L1 node -->
+  <div class="scene" id="s5">
+    <div class="lattice" id="lattice"></div>
+    <div class="scene-title"><div class="k">A first-class economic citizen</div><div class="t">The device is a DePIN node on HKChain</div><div class="s">Earns rewards & holds governance weight — without joining BFT consensus</div></div>
+    <div class="device" id="dev5" style="z-index:20">
+      <div class="pulse"></div>
+      <div class="ico">⬡</div>
+      <div class="dlabel">DePIN NODE</div>
+      <div class="did">L1 · device identity SBT</div>
+    </div>
+  </div>
+
+  <!-- CLOSING -->
+  <div id="closing">
+    <div class="lock">Compliance enforced by the chain</div>
+    <h1>HK<span>Chain</span></h1>
+    <p>Physical green assets, tokenized and settled on a Hong-Kong-compliant L1 — where every device earns, and every rule is enforced in consensus.</p>
+    <div class="stamps">
+      <div class="stamp">⬡ DePIN device economy</div>
+      <div class="stamp">◈ HKD stablecoin rail</div>
+      <div class="stamp">✓ Chain-level compliance</div>
+    </div>
+  </div>
+
+  <button id="replay">↻ Replay</button>
+  <div class="chapter" id="chapter"></div>
+  <div class="step-label" id="steplabel"><b>1</b> / 5 · Generation</div>
+  <div class="progress" id="progress"></div>
+</div>
+
+<script>
+const DUR = 30000; // total ms
+const scenes = [
+  {id:'s1', dur:6000, label:'1 / 5 · Generation'},
+  {id:'s2', dur:6000, label:'2 / 5 · Carbon credit'},
+  {id:'s3', dur:6000, label:'3 / 5 · Parallel GGD'},
+  {id:'s4', dur:6000, label:'4 / 5 · HKD settlement'},
+  {id:'s5', dur:6000, label:'5 / 5 · DePIN node'},
+];
+
+const stage = document.getElementById('stage');
+const progress = document.getElementById('progress');
+const chapter = document.getElementById('chapter');
+const steplabel = document.getElementById('steplabel');
+const closing = document.getElementById('closing');
+const replay = document.getElementById('replay');
+
+// build chapter segments
+scenes.forEach((_,i)=>{const d=document.createElement('div');d.className='seg';d.id='seg'+i;chapter.appendChild(d);});
+
+let timers=[];
+function clearTimers(){timers.forEach(t=>clearTimeout(t));timers=[];}
+function T(fn,ms){timers.push(setTimeout(fn,ms));}
+
+function easeCount(el, from, to, ms, prefix='', fix=0){
+  const start=performance.now();
+  function tick(now){
+    let p=Math.min(1,(now-start)/ms);
+    p=1-Math.pow(1-p,3); // easeOutCubic
+    const v=from+(to-from)*p;
+    el.textContent=prefix+(fix?v.toFixed(fix):Math.round(v).toLocaleString());
+    if(p<1) requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+}
+
+function showScene(idx){
+  scenes.forEach((s,i)=>{
+    const el=document.getElementById(s.id);
+    el.classList.toggle('active', i===idx);
+    const seg=document.getElementById('seg'+i);
+    seg.className='seg'+(i===idx?' on':(i<idx?' done':''));
+  });
+  steplabel.innerHTML='<b>'+(idx+1)+'</b>'+scenes[idx].label.slice(1);
+}
+
+// ---- wires helper ----
+const wires=document.getElementById('wires');
+function wire(x1,y1,x2,y2,color,delay){
+  const ns='http://www.w3.org/2000/svg';
+  const path=document.createElementNS(ns,'path');
+  const mx=(x1+x2)/2;
+  path.setAttribute('d',`M ${x1} ${y1} C ${mx} ${y1}, ${mx} ${y2}, ${x2} ${y2}`);
+  path.setAttribute('class','wire');
+  path.setAttribute('stroke',color);
+  wires.appendChild(path);
+  const len=path.getTotalLength();
+  path.style.strokeDasharray=len;
+  path.style.strokeDashoffset=len;
+  path.style.opacity=1;
+  T(()=>{path.style.transition='stroke-dashoffset 1s ease';path.style.strokeDashoffset=0;},delay);
+  // flow dot
+  const dot=document.createElementNS(ns,'circle');
+  dot.setAttribute('r','4');dot.setAttribute('fill',color);dot.setAttribute('class','flowdot');
+  wires.appendChild(dot);
+  T(()=>{
+    dot.style.opacity=1;
+    let s=performance.now();
+    function fl(now){let p=((now-s)/1100)%1;const pt=path.getPointAtLength(p*len);dot.setAttribute('cx',pt.x);dot.setAttribute('cy',pt.y);requestAnimationFrame(fl);}
+    requestAnimationFrame(fl);
+  },delay);
+  return path;
+}
+function clearWires(){wires.innerHTML='';}
+
+// =================== SEQUENCE ===================
+function run(){
+  clearTimers();clearWires();
+  closing.classList.remove('show');closing.style.opacity=0;
+  replay.style.display='none';
+  let t=0;
+
+  // progress bar over full duration
+  progress.style.transition='none';progress.style.width='0';
+  requestAnimationFrame(()=>{progress.style.transition='width '+DUR+'ms linear';progress.style.width='100%';});
+
+  // SCENE 1
+  showScene(0);
+  const sun=document.getElementById('sun');
+  sun.style.cssText+='top:205px;left:560px;transition:opacity 1s, transform 1s;opacity:0;transform:scale(.6)';
+  T(()=>{sun.style.opacity=1;sun.style.transform='scale(1)';},300);
+  document.querySelector('#dev1 .pulse').style.animation='ring 1.6s ease-out infinite';
+  T(()=>easeCount(document.querySelector('#kwh .val'),0,128,4200),700);
+  t+=scenes[0].dur;
+
+  // SCENE 2
+  T(()=>{
+    showScene(1);clearWires();
+    wire(640,360,760,300,'#3FA76A',300);
+    const tk=document.getElementById('tk-carbon');
+    T(()=>{tk.style.transition='all .7s';tk.style.opacity=1;tk.style.transform='translateX(0)';},600);
+    T(()=>{const c=document.getElementById('co2');c.style.transition='opacity .6s';c.style.opacity=1;},900);
+  },t);
+  t+=scenes[1].dur;
+
+  // SCENE 3 — parallel mint
+  T(()=>{
+    showScene(2);clearWires();
+    wire(600,360,735,318,'#3FA76A',300);
+    wire(600,380,735,398,'#E0A93B',300);
+    const a=document.getElementById('p-carbon'), b=document.getElementById('p-ggd');
+    T(()=>{a.style.transition='all .6s';a.style.opacity=1;},700);
+    T(()=>{b.style.transition='all .6s';b.style.opacity=1;},1000);
+  },t);
+  t+=scenes[2].dur;
+
+  // SCENE 4 — HKD settlement
+  T(()=>{
+    showScene(3);clearWires();
+    wire(640,360,735,288,'#1FA8A0',300);
+    wire(640,380,735,373,'#3FA76A',500);
+    const h=document.getElementById('tk-hkd'), c2=document.getElementById('tk-c2');
+    T(()=>{h.style.transition='all .6s';h.style.opacity=1;},600);
+    T(()=>{c2.style.transition='all .6s';c2.style.opacity=1;},950);
+    T(()=>easeCount(document.querySelector('#hkd .val'),0,46,3200,'HK$ '),900);
+  },t);
+  t+=scenes[3].dur;
+
+  // SCENE 5 — DePIN lattice
+  T(()=>{
+    showScene(4);clearWires();
+    const lat=document.getElementById('lattice');lat.innerHTML='';
+    const cx=640,cy=360;
+    const pts=[];
+    for(let i=0;i<26;i++){
+      const ang=(i/26)*Math.PI*2, rad=150+Math.random()*210;
+      const x=cx+Math.cos(ang)*rad, y=cy+Math.sin(ang)*rad*0.62;
+      pts.push({x,y});
+      const n=document.createElement('div');n.className='node';n.style.left=x+'px';n.style.top=y+'px';
+      lat.appendChild(n);
+      T(()=>{n.style.transition='opacity .5s';n.style.opacity=1;
+        if(Math.random()>0.45)T(()=>n.classList.add('lit'),Math.random()*900);},300+i*45);
+    }
+    document.querySelector('#dev5 .pulse').style.animation='ring 1.6s ease-out infinite';
+    // connect a few nodes to center
+    T(()=>{pts.slice(0,12).forEach((p,i)=>wire(cx,cy,p.x,p.y,'rgba(31,168,160,.5)',i*60));},500);
+  },t);
+  t+=scenes[4].dur;
+
+  // CLOSING (overlaps tail of scene 5)
+  T(()=>{
+    closing.style.opacity=1;closing.classList.add('show');
+    document.querySelectorAll('.scene').forEach(s=>s.classList.remove('active'));
+    chapter.querySelectorAll('.seg').forEach(s=>s.className='seg done');
+  },DUR-1200);
+  T(()=>{clearWires();const lat=document.getElementById('lattice');if(lat)lat.innerHTML='';},DUR-400);
+
+  // replay
+  T(()=>{replay.style.display='block';},DUR+400);
+}
+
+replay.addEventListener('click',run);
+window.addEventListener('load',()=>{T(run,400);});
+
+// fit-to-viewport scaling
+function fit(){
+  const sx=window.innerWidth/1280, sy=window.innerHeight/720;
+  const s=Math.min(sx,sy)*0.97;
+  stage.style.transform=`translate(-50%,-50%) scale(${s})`;
+}
+window.addEventListener('resize',fit);fit();
+</script>
+</body>
+</html>
