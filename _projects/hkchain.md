@@ -8,6 +8,8 @@ category: work
 related_publications: false
 ---
 
+testnet: https://dashboard.hkchains.net
+
 HKChain is a compliance-native Layer 1 for stablecoin issuance and real-world-asset (RWA)
 tokenization, aligned with Hong Kong's stablecoin regulatory framework. Built on the
 Cosmos SDK with EVM compatibility. I design its protocol-level compliance enforcement and
