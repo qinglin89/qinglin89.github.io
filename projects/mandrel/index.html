@@ -1,0 +1,112 @@
+<!DOCTYPE html> <html lang="en"> <head> <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> <meta charset="utf-8"> <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"> <meta http-equiv="X-UA-Compatible" content="IE=edge"> <title> mandrel | Leon Zhu </title> <meta name="author" content="Yongliang Zhu"> <meta name="description" content="An open-source protocol for running AI coding agents on the same codebase for months — bounded working sets over unbounded project time."> <meta name="keywords" content="jekyll, jekyll-theme, academic-website, portfolio-website"> <meta property="og:site_name" content="Leon Zhu"> <meta property="og:type" content="website"> <meta property="og:title" content="Leon Zhu | mandrel"> <meta property="og:url" content="https://qinglin89.github.io/projects/mandrel/"> <meta property="og:description" content="An open-source protocol for running AI coding agents on the same codebase for months — bounded working sets over unbounded project time."> <meta property="og:image" content="https://qinglin89.github.io/assets/img/projects/mandrel-cover.jpg"> <meta property="og:locale" content="en"> <meta name="twitter:card" content="summary"> <meta name="twitter:title" content="mandrel"> <meta name="twitter:description" content="An open-source protocol for running AI coding agents on the same codebase for months — bounded working sets over unbounded project time."> <meta name="twitter:image" content="https://qinglin89.github.io/assets/img/projects/mandrel-cover.jpg"> <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https:; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: https:; font-src 'self' data: https:; media-src 'self' https:; frame-src 'self' https:; connect-src 'self' https:;"> <style>
+  :root {
+    --max-content-width: 930px;
+  }
+</style> <link rel="stylesheet" href="/assets/css/tailwind.css?v=50c64c15cbb9fd1ce6056fdb8bcb4b62"> <link defer rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" integrity="sha256-MVopmdyC2tYTiJ8wlktf0uh0v4NgT+vNdyVFepi7Q0c=" crossorigin="anonymous"> <link defer rel="stylesheet" href="https://cdn.jsdelivr.net/npm/academicons@1.9.5/css/academicons.min.css" integrity="sha256-SzrCOBJbGVFMahewkgjwnApaV2+av1DwMAA+/QGLyZw=" crossorigin="anonymous"> <link defer rel="stylesheet" href="https://cdn.jsdelivr.net/npm/scholar-icons@1.0.3/css/scholar-icons.css" integrity="sha256-VY3hHVj/hNX3fYG6wtbA6TcKJQl7+FthzGSyIB64klY=" crossorigin="anonymous"> <link defer rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:100,300,400,500,700|Material+Icons&amp;display=swap"> <link defer rel="stylesheet" href="/assets/css/jekyll-pygments-themes-github.css?v=591dab5a4e56573bf4ef7fd332894c99" media="" id="highlight_theme_light"> <link rel="shortcut icon" href="/assets/img/favicon.svg?v=fa827e6751a305515f49b238c4b6976a"> <link rel="stylesheet" href="/assets/css/main.css?v=f0b101217084a90093badfe99ff9a7d1"> <link rel="canonical" href="https://qinglin89.github.io/projects/mandrel/"> <script src="/assets/js/theme.js?v=7af685e2ba20b37fef545c97b8064050"></script> <link defer rel="stylesheet" href="/assets/css/jekyll-pygments-themes-native.css?v=5847e5ed4a4568527aa6cfab446049ca" media="none" id="highlight_theme_dark"> <script>
+    initTheme();
+  </script> </head> <body class="fixed-top-nav "> <header> <nav id="navbar" class="navbar navbar-light navbar-expand-sm fixed-top" role="navigation"> <div class="container"> <a class="navbar-brand title font-weight-lighter" href="/"> Leon Zhu </a> <button class="navbar-toggler collapsed navbar-toggler-main" type="button" data-nav-toggle="navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"> <span class="sr-only">Toggle navigation</span> <span class="icon-bar top-bar"></span> <span class="icon-bar middle-bar"></span> <span class="icon-bar bottom-bar"></span> </button> <div class="collapse navbar-collapse navbar-collapse-main" id="navbarNav"> <ul class="navbar-nav navbar-menu-list flex-nowrap"> <li class="nav-item "> <a class="nav-link" href="/">about </a> </li> <li class="nav-item "> <a class="nav-link" href="/blog/">blog </a> </li> <li class="nav-item active"> <a class="nav-link" href="/projects/">projects <span class="sr-only">(current)</span> </a> </li> <li class="nav-item"> <button id="search-toggle" type="button" title="Search" aria-label="Open search"> <span class="nav-link">ctrl k <i class="fa-solid fa-magnifying-glass"></i></span> </button> </li> <li class="toggle-container"> <button id="light-toggle" type="button" title="Change theme" aria-label="Change color theme"> <i class="fa-half-sun-moon" id="light-toggle-system"></i> <i class="fa-solid fa-moon" id="light-toggle-dark"></i> <i class="fa-solid fa-sun" id="light-toggle-light"></i> </button> </li> </ul> </div> </div> </nav> <progress id="progress" value="0"> <div class="progress-container"> <span class="progress-bar"></span> </div> </progress> </header> <div class="container mt-5" role="main"> <div class="post"> <header class="post-header"> <h1 class="post-title">mandrel</h1> <p class="post-description">An open-source protocol for running AI coding agents on the same codebase for months — bounded working sets over unbounded project time.</p> </header> <article> <p>mandrel is the protocol underneath the way I do AI-assisted development: task-scoped work, selective project memory, and deterministic control outside the model, deployed into every repository I work in. It is open source under Apache-2.0, and it is the layer <a href="/projects/orch-hub/">orch-hub</a> sits on top of — orch-hub operates a portfolio of repositories, mandrel is what each of those repositories actually runs.</p> <p><a href="/blog/2026/context-isnt-the-bottleneck-drift-is/">Read the full write-up →</a> · <a href="https://github.com/qinglin89/mandrel" rel="external nofollow noopener" target="_blank">View the repository on GitHub →</a></p> <h4 id="the-problem-is-drift-not-context-length">The problem is drift, not context length</h4> <p>The failure mode of long-horizon AI-assisted development is not model capability. It is <strong>drift</strong>: decision history accumulating without curation until neither the human nor the agent can face it. Note the axis — drift is a function of project <em>time</em>, not project size. A hundred thousand lines generated in a week has almost none; twenty thousand lines iterated over two years is where it becomes lethal. What accumulates is not code, it is the sediment of choices made and reversed.</p> <p>Longer context windows do not fix this. The window fills with the transcript of how you got somewhere rather than the conclusions, and capacity was never the binding constraint — precision is.</p> <h4 id="one-invariant">One invariant</h4> <blockquote> <p><strong>The working set stays bounded over unbounded project time.</strong></p> </blockquote> <p>Day 1 and day 300, a fresh session faces the same <em>shape</em> of context: a small constant set of project invariants, one task, and a routed handful of relevant documents. The corpus behind it grows. The slice loaded into any given session does not.</p> <h4 id="three-mechanisms">Three mechanisms</h4> <p><strong>Tasks are sized to one context window.</strong> A task that fits in one session gets completed; a task that doesn’t gets handed off, and every handoff loses information. The protocol’s job is not to make handoffs lossless — that is unachievable — but to make them rare and structured. The task file carries the full lifecycle: development, fresh-context review, remediation, handoff, and completion. Review converges through frozen finding groups, delta-only re-review, and one-shot human escalation.</p> <p><strong>Memory admits rather than accumulates.</strong> Writes to the project snapshot happen only at task completion, and a fact must pass three tests to enter: is it expensive to re-derive, does it stay true, and does knowing it change what the agent does next. What passes are invariants, non-obvious couplings, anti-patterns, and <em>intentional omissions</em> — the category no amount of reading recovers, because absence leaves no trace in the code.</p> <p><strong>Deterministic control lives outside the model.</strong> A caller re-parses the task file, selects the next legal role, assembles and injects context and contracts, verifies declared outputs, counts convergence budgets, and escalates decisions it may not make.</p> <h4 id="what-the-protocol-does-not-trust">What the protocol does not trust</h4> <p>The suite is layered by a single question: can a model decline to comply? Contracts, role specifications, and skills are semantic — they work by being read and understood, which means they work most of the time. Session hooks and the scheduler’s output verification are mechanical: they run outside the model’s judgment and cannot be reasoned with.</p> <p>That split is the design. The semantic layers carry everything requiring judgment, because only a model can supply it. The mechanical layers carry the few properties that must hold regardless — the tree is clean, the handoff exists, the declared output is really there — and they are deliberately few, because every mechanical check is a rule you can no longer change by argument.</p> <h4 id="two-interchangeable-executors">Two interchangeable executors</h4> <p>Role contracts are anonymous and self-contained: a session never learns that other kinds of session exist, and the caller owns all sequencing. That is what lets a human run the loop by hand and a headless scheduler run it unattended, from the same runbook, with byte-equivalent delivery — you can take the wheel at any session boundary and the scheduler picks up where you left off. Automation you cannot step into is automation you must trust completely or abandon completely.</p> <h4 id="in-use">In use</h4> <p>Five months across four repositories, 286 completed tasks, the largest a ~122k-line Go service whose curated snapshot sits at ~34k words. The protocol was introduced to that codebase ten months after its first commit — a brownfield adoption, which is the situation most readers are actually in.</p> <p><strong>Stack:</strong> Markdown contracts · Python deployment and drift-detection CLI · Bash session hooks for three agent surfaces · a headless dev/review scheduler · a deterministic verification gate.</p> </article> </div> </div> <footer class="fixed-bottom" role="contentinfo"> <div class="container mt-0"> © Copyright 2026 Yongliang Zhu. Powered by <a href="https://jekyllrb.com/" target="_blank" rel="external nofollow noopener">Jekyll</a> with <a href="https://github.com/alshedivat/al-folio" rel="external nofollow noopener" target="_blank">al-folio</a> theme. Hosted by <a href="https://pages.github.com/" target="_blank" rel="external nofollow noopener">GitHub Pages</a>. Photos from <a href="https://unsplash.com" target="_blank" rel="external nofollow noopener">Unsplash</a>. </div> </footer> <script>
+  window.alFolio = {
+    compatBootstrap: false
+  };
+</script> <script src="/assets/js/nav-toggle.js?v=141bd79a73ebc0f0b6ea58e440ae79fc"></script> <script defer src="https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js" integrity="sha256-Nn1q/fx0H7SNLZMQ5Hw5JLaTRZp0yILA/FRexe19VdI=" crossorigin="anonymous"></script> <script defer src="https://cdn.jsdelivr.net/npm/imagesloaded@5.0.0/imagesloaded.pkgd.min.js" integrity="sha256-htrLFfZJ6v5udOG+3kNLINIKh2gvoKqwEhHYfTTMICc=" crossorigin="anonymous"></script> <script defer src="/assets/js/masonry.js?v=e49affc7bd2646f6acdad1dbe02c2359" type="text/javascript"></script> <script defer type="text/javascript" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js" integrity="sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI=" crossorigin="anonymous"></script> <script src="/assets/al_math/js/mathjax-setup.js"></script> <script defer src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6" crossorigin="anonymous"></script> <script src="/assets/js/tooltips-setup.js?v=fe487e99db6c43751e6e7bdb2d6a0611"></script> <script src="/assets/js/no_defer.js?v=53b1b1a645525975c963ce8bf8bfefcf"></script> <script defer src="/assets/js/common.js?v=87baac90f765f2f3362dcf6aaf312a8a"></script> <script defer src="/assets/js/copy_code.js?v=c8a01c11a92744d44b093fc3bda915df" type="text/javascript"></script> <script defer src="/assets/js/jupyter_new_tab.js?v=896d254890d9b47f0281f63bfccf0dee"></script> <script async src="https://d1bxh8uas1mnw7.cloudfront.net/assets/embed.js"></script> <script async src="https://badge.dimensions.ai/badge.js"></script> <script defer src="https://cdn.jsdelivr.net/npm/medium-zoom@1.1.0/dist/medium-zoom.min.js" integrity="sha256-ZgMyDAIYDYGxbcpJcfUnYwNevG/xi9OHKaR/8GK+jWc=" crossorigin="anonymous"></script> <script defer src="/assets/al_img_tools/js/zoom.js"></script> <script defer src="/assets/js/progress-bar.js?v=499464c5c63ced6cf7ad62509f1e2610" type="text/javascript"></script> <script src="https://cdn.jsdelivr.net/npm/vanilla-back-to-top@7.2.1/dist/vanilla-back-to-top.min.js" integrity="sha256-uMJJ3EoTyfRBoTbR+lrfu1uRQ87RZG8AR3cVNuQVeFg=" crossorigin="anonymous"></script> <script>
+    addBackToTop();
+  </script> <script type="module" src="/assets/al_search/js/search/ninja-keys.min.js"></script> <ninja-keys hidebreadcrumbs noautoloadmdicons placeholder="Type to start searching"></ninja-keys> <script src="/assets/al_search/js/search-setup.js"></script> <script>
+// get the ninja-keys element
+const ninja = document.querySelector('ninja-keys');
+
+// add the home and posts menu items
+ninja.data = [{
+    id: "nav-about",
+    title: "about",
+    section: "Navigation",
+    handler: () => {
+      window.location.href = "/";
+    },
+  },{id: "nav-blog",
+          title: "blog",
+          description: "",
+          section: "Navigation",
+          handler: () => {
+            window.location.href = "/blog/";
+          },
+        },{id: "nav-projects",
+          title: "projects",
+          description: "Selected projects — building things that are correct, verifiable, and grounded in real constraints.",
+          section: "Navigation",
+          handler: () => {
+            window.location.href = "/projects/";
+          },
+        },{id: "post-context-isn-39-t-the-bottleneck-drift-is",
+        
+          title: "Context isn&#39;t the bottleneck. Drift is.",
+        
+        description: "A protocol for long-horizon AI coding, and what 286 tasks across four repositories taught me about it.",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2026/context-isnt-the-bottleneck-drift-is/";
+          
+        },
+      },{id: "projects-hkchain-compliance-native-l1",
+          title: 'HKChain — Compliance-Native L1',
+          description: "A compliance-native Layer 1 for stablecoin issuance and real-world-asset tokenization, aligned with Hong Kong&#39;s regulatory framework.",
+          section: "Projects",handler: () => {
+              window.location.href = "/projects/hkchain/";
+            },},{id: "projects-mandrel",
+          title: 'mandrel',
+          description: "An open-source protocol for running AI coding agents on the same codebase for months — bounded working sets over unbounded project time.",
+          section: "Projects",handler: () => {
+              window.location.href = "/projects/mandrel/";
+            },},{id: "projects-orch-hub",
+          title: 'orch-hub',
+          description: "A local control plane for AI coding agents — one operator, a portfolio of repos, and year-long projects kept inside window-sized tasks.",
+          section: "Projects",handler: () => {
+              window.location.href = "/projects/orch-hub/";
+            },},{id: "projects-quantx",
+          title: 'QuantX',
+          description: "A Go-based quantitative trading platform — systematic strategies with backtest-to-live parity and a human-AI research loop.",
+          section: "Projects",handler: () => {
+              window.location.href = "/projects/quantx/";
+            },},{
+        id: 'social-email',
+        title: 'email',
+        section: 'Socials',
+        handler: () => {
+          window.open("mailto:%71%69%6E%67%6C%69%6E%38%39%32%37@%67%6D%61%69%6C.%63%6F%6D", "_blank");
+        },
+      },{
+        id: 'social-github',
+        title: 'GitHub',
+        section: 'Socials',
+        handler: () => {
+          window.open("https://github.com/qinglin89", "_blank");
+        },
+      },{
+      id: 'light-theme',
+      title: 'Change theme to light',
+      description: 'Change the theme of the site to Light',
+      section: 'Theme',
+      handler: () => {
+        setThemeSetting("light");
+      },
+    },
+    {
+      id: 'dark-theme',
+      title: 'Change theme to dark',
+      description: 'Change the theme of the site to Dark',
+      section: 'Theme',
+      handler: () => {
+        setThemeSetting("dark");
+      },
+    },
+    {
+      id: 'system-theme',
+      title: 'Use system default theme',
+      description: 'Change the theme of the site to System Default',
+      section: 'Theme',
+      handler: () => {
+        setThemeSetting("system");
+      },
+    },];
+
+</script> <script src="/assets/al_search/js/shortcut-key.js"></script> </body> </html>
