@@ -37,28 +37,34 @@ precision is.
 
 Day 1 and day 300, a fresh session faces the same _shape_ of context: a small constant set of
 project invariants, one task, and a routed handful of relevant documents. The corpus behind it
-grows. The slice loaded into any given session does not.
+grows. The slice is bounded by the task rather than being allowed to grow merely because the
+project is older.
 
 {% include figure.liquid path="assets/img/projects/mandrel-project.svg" class="img-fluid rounded" alt="Diagram of one mandrel task cycle: a session works from a bounded project snapshot, relevant material, and one task record; implementation changes and durable conclusions flow back into the repository while completed tasks move into an archive that is not loaded by default." title="One mandrel task cycle" zoomable=true avoid_scaling=true loading="lazy" %}
 
 #### Three mechanisms
 
-**Tasks are sized to one context window.** A task that fits in one session gets completed; a
-task that doesn't gets handed off, and every handoff loses information. The protocol's job is
-not to make handoffs lossless — that is unachievable — but to make them rare and structured.
+**Development work is estimated in context-window units.** When it needs another development
+session, the task file carries a structured handoff, and every handoff loses information. The
+protocol's job is not to make handoffs lossless — that is unachievable — but to make them rare
+and structured.
 The task file carries the full lifecycle: development, fresh-context review, remediation,
 handoff, and completion. Review converges through frozen finding groups, delta-only re-review,
 and one-shot human escalation.
 
-**Memory admits rather than accumulates.** Writes to the project snapshot happen only at task
-completion, and a fact must pass three tests to enter: is it expensive to re-derive, does it
-stay true, and does knowing it change what the agent does next. What passes are invariants,
-non-obvious couplings, anti-patterns, and _intentional omissions_ — the category no amount of
-reading recovers, because absence leaves no trace in the code.
+**Memory admits rather than accumulates.** Initialization creates the project snapshot.
+Ordinary work sessions never write it; durable task findings enter at completion closeout,
+while explicit housekeeping is the separate maintenance path. A fact must pass three tests
+to enter: is it expensive to re-derive, does it stay true, and does knowing it change what the
+agent does next. What passes are invariants, non-obvious couplings, anti-patterns, and
+_intentional omissions_ — the category no amount of reading recovers, because absence leaves
+no trace in the code.
 
 **Deterministic control lives outside the model.** A caller re-parses the task file, selects the
-next legal role, assembles and injects context and contracts, verifies declared outputs, counts
-convergence budgets, and escalates decisions it may not make.
+next legal role, builds the role prompt with its contract and entry checklist, verifies
+declared outputs, counts convergence budgets, and escalates decisions it may not make.
+Backend hooks or imports provide eager context; task frontmatter tells the session which
+additional documents to preload.
 
 #### What the protocol does not trust
 

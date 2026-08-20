@@ -154,9 +154,9 @@ escalations, or a human runs the same loop by hand.
 ```
 
 Every dev or review session's durable declarations go in the task file. Durable
-findings enter `.ai/` at closeout, and only if they pass the tests in Mechanism
-2. The eager substrate arrives through tool hooks or imports; task frontmatter
-routes the additional documents the session reads.
+findings enter `.ai/` at closeout, and only if they pass the admission tests
+below. The eager substrate arrives through tool hooks or imports; task
+frontmatter routes the additional documents the session reads.
 
 ## Mechanism 1: the task is the unit the project grows in
 
