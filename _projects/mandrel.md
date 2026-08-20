@@ -22,7 +22,7 @@ mandrel is what each of those repositories actually runs.
 
 The failure mode of long-horizon AI-assisted development is not model capability. It is
 **drift**: decision history accumulating without curation until neither the human nor the
-agent can face it. Note the axis — drift is a function of project *time*, not project size. A
+agent can face it. Note the axis — drift is a function of project _time_, not project size. A
 hundred thousand lines generated in a week has almost none; twenty thousand lines iterated
 over two years is where it becomes lethal. What accumulates is not code, it is the sediment of
 choices made and reversed.
@@ -35,9 +35,11 @@ precision is.
 
 > **The working set stays bounded over unbounded project time.**
 
-Day 1 and day 300, a fresh session faces the same *shape* of context: a small constant set of
+Day 1 and day 300, a fresh session faces the same _shape_ of context: a small constant set of
 project invariants, one task, and a routed handful of relevant documents. The corpus behind it
 grows. The slice loaded into any given session does not.
+
+{% include figure.liquid path="assets/img/projects/mandrel-project.svg" class="img-fluid rounded" alt="Diagram of one mandrel task cycle: a session works from a bounded project snapshot, relevant material, and one task record; implementation changes and durable conclusions flow back into the repository while completed tasks move into an archive that is not loaded by default." title="One mandrel task cycle" zoomable=true avoid_scaling=true loading="lazy" %}
 
 #### Three mechanisms
 
@@ -51,7 +53,7 @@ and one-shot human escalation.
 **Memory admits rather than accumulates.** Writes to the project snapshot happen only at task
 completion, and a fact must pass three tests to enter: is it expensive to re-derive, does it
 stay true, and does knowing it change what the agent does next. What passes are invariants,
-non-obvious couplings, anti-patterns, and *intentional omissions* — the category no amount of
+non-obvious couplings, anti-patterns, and _intentional omissions_ — the category no amount of
 reading recovers, because absence leaves no trace in the code.
 
 **Deterministic control lives outside the model.** A caller re-parses the task file, selects the
