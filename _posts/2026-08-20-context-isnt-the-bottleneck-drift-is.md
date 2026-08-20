@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Context isn't the bottleneck. Drift is."
-date: 2026-08-18 10:00:00
+date: 2026-08-20 10:00:00
 description: A protocol for long-horizon AI coding, and what 286 tasks across four repositories taught me about it.
 og_image: https://qinglin89.github.io/assets/img/projects/mandrel-cover.jpg
 tags: ai-coding agents protocol
