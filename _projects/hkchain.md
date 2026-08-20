@@ -3,7 +3,7 @@ layout: page
 title: HKChain — Compliance-Native L1
 description: A compliance-native Layer 1 for stablecoin issuance and real-world-asset tokenization, aligned with Hong Kong's regulatory framework.
 img: assets/img/projects/hkchain-cover.jpg
-importance: 2
+importance: 3
 category: work
 related_publications: false
 ---

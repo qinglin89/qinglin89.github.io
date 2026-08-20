@@ -3,7 +3,7 @@ layout: page
 title: QuantX
 description: A Go-based quantitative trading platform — systematic strategies with backtest-to-live parity and a human-AI research loop.
 img: assets/img/projects/quantx-cover.jpg
-importance: 1
+importance: 2
 category: work
 related_publications: false
 ---

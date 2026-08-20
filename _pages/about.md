@@ -20,24 +20,22 @@ announcements:
   limit: 5 # leave blank to include all the news in the `_news` folder
 
 latest_posts:
-  enabled: false
+  enabled: true
   scrollable: true # adds a vertical scroll bar if there are more than 3 new posts items
   limit: 3 # leave blank to include all the blog posts
 ---
 
-I am an independent developer working on distributed systems, protocol design, and applied
-quantitative finance. My work spans the full stack — from consensus-level infrastructure to
-trading systems — with a focus on building things that are correct, verifiable, and grounded
-in real constraints rather than abstraction.
+I am an independent developer working on AI development infrastructure, distributed systems,
+protocol design, and applied quantitative finance. My work spans long-horizon agent workflows,
+consensus-level infrastructure, and trading systems, with a focus on building things that are
+correct, verifiable, and grounded in real constraints rather than abstraction.
 
-Right now, I am building a Go-based quantitative trading platform, and I contribute to the
-technical architecture of a Hong Kong–regulated, compliance-native blockchain for stablecoin
-issuance. I recently submitted work to GLEIF's Call for Papers on the Digital Policy Trilemma,
-examining how organizational identity should extend to autonomous agents.
+My work includes [mandrel](/projects/mandrel/), an open-source protocol for running AI coding
+agents on the same codebase for months; [QuantX](/projects/quantx/), a Go-based quantitative
+trading platform; and the technical architecture of [HKChain](/projects/hkchain/), a
+compliance-native blockchain for stablecoin issuance and real-world assets.
 
-More broadly, my interests sit at the intersection of systems engineering and the questions
-that shape what gets built — from how compliance can be enforced at the infrastructure layer,
-to where the boundary of an organization lies when it acts through software agents. I am equally
-drawn to quantitative trading, where systems engineering meets probability and real market
-behavior, and where ideas are tested against outcomes rather than opinion. If that overlaps with
-what you are working on, I am reachable below.
+Across them, I am interested in how systems preserve correctness and intent over time: how an
+AI coding session inherits decisions without inheriting an unbounded transcript, how compliance
+can be enforced at the infrastructure layer, and how trading ideas survive contact with real
+execution. If that overlaps with what you are working on, I am reachable below.

@@ -3,7 +3,7 @@ layout: page
 title: orch-hub
 description: A local control plane for AI coding agents — one operator, a portfolio of repos, and year-long projects kept inside window-sized tasks.
 img: assets/img/projects/orch-hub-cover.jpg
-importance: 3
+importance: 4
 category: work
 related_publications: false
 ---
@@ -12,6 +12,11 @@ orch-hub is a control plane I design and build for my own AI-assisted developmen
 resident on my Mac, is operated from a phone over a private network, and coordinates
 per-repository orchestrator programs that drive autonomous dev/review loops over task files.
 The repository is private; this page describes what it is and why it exists.
+
+The protocol those loops actually run is [mandrel](/projects/mandrel/), which is open source.
+The division is deliberate: mandrel is what a single repository runs and is useful on its own,
+with or without a control plane; orch-hub is the layer above it, where a portfolio of
+repositories becomes one operating surface.
 
 #### The product in use
 

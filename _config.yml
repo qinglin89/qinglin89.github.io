@@ -122,8 +122,8 @@ bing_site_verification: # out your bing-site-verification ID (Bing Webmaster)
 # Blog
 # -----------------------------------------------------------------------------
 
-blog_name: al-folio # blog_name will be displayed in your blog page
-blog_description: a simple whitespace theme for academics
+blog_name: Writing # blog_name will be displayed in your blog page
+blog_description: Long-form notes on AI development infrastructure, distributed systems, and software that has to stay correct over time.
 permalink: /blog/:year/:title/
 lsi: false # produce an index for related posts
 
@@ -217,6 +217,7 @@ kramdown:
 include: ["_pages"]
 exclude:
   - al-folio-upgrade-report.md
+  - assets/jupyter/blog.ipynb
   - bin/
   - CONTRIBUTING.md
   - CUSTOMIZE.md
@@ -333,8 +334,8 @@ jekyll-archives:
   books:
     enabled: [year, tags, categories] # enables year, tag and category archives (remove if you need to disable one of them).
 
-display_tags: ["formatting", "images", "links", "math", "code", "blockquotes"] # these tags will be displayed on the front page of your blog
-display_categories: ["external-services"] # these categories will be displayed on the front page of your blog
+display_tags: ["ai-coding", "agents", "protocol"] # these tags will be displayed on the front page of your blog
+display_categories: ["engineering"] # these categories will be displayed on the front page of your blog
 
 # -----------------------------------------------------------------------------
 # Jekyll Scholar
