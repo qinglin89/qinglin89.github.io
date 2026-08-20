@@ -88,8 +88,6 @@ free. It only lets you pay for it in one sitting.
 So I spent five months building the thing I actually wanted, and running it on
 real work. This is what I learned.
 
----
-
 ## The invariant
 
 The invariant is one line:
@@ -154,8 +152,6 @@ human runs the identical loop by hand.
 Everything a session declares goes in the task file. Everything durable it
 learned goes into `.ai/`, but only at the end, and only if it passes the tests
 in Mechanism 2.
-
----
 
 ## Mechanism 1: the task is the unit the project grows in
 
@@ -258,8 +254,6 @@ accepted, what the review said, what stayed unresolved. It is also what makes
 delegation survivable: you can hand work to an agent and check afterwards at the
 level of decisions rather than reading every diff, which is the only version of
 "trust it" that is not just hoping.
-
----
 
 ## Mechanism 2: memory admits, not accumulates
 
@@ -399,8 +393,6 @@ into an endless series of patches, because you are specifying something whose
 job is to emerge. The working-set bound has the same shape: nothing computes it;
 a size ceiling is enforced and the rest follows.
 
----
-
 ## Inside the task lifecycle: review is a bounded state machine
 
 Development is only one part of a task's lifecycle. Review has to check the
@@ -452,8 +444,6 @@ escalates on round one.
 The findings remain a reviewer's judgment. The rules that make the loop
 terminate are explicit task state and policy, precise enough for a deterministic
 caller to enforce.
-
----
 
 ## Mechanism 3: deterministic control lives outside the model
 
@@ -539,8 +529,6 @@ This is as close as I can get to making an agent follow a protocol. I cannot
 guarantee semantic compliance, so the parts that matter most do not depend on
 it.
 
----
-
 ## Did the invariant actually hold?
 
 The claim is that the working set stays bounded while project time doesn't. That
@@ -607,8 +595,6 @@ enforced. Writing the measurement script exposed the lapse: the invariant is
 only as good as the thing that checks it, and that check was a habit rather than
 a gate.
 
----
-
 ## Which part is load-bearing
 
 If you take one thing, take the **admission tests**. Derivation cost,
@@ -627,8 +613,6 @@ first two are running.** They matter — sizing is what keeps handoffs rare, and
 anonymity is what let me step in and out of the automation — but they're
 infrastructure for a loop that already works. Adopting them first would be
 building a scheduler before you have anything worth scheduling.
-
----
 
 ## Does a stronger model make this unnecessary?
 
@@ -672,8 +656,6 @@ are worth keeping, what a review may still raise, when a task is done. Those are
 judgments about a specific project, and no amount of model progress makes a
 project's accumulated decisions organize themselves.
 
----
-
 ## Why not a general memory layer
 
 There's a healthy research and product line in agent memory — MemGPT/Letta,
@@ -693,8 +675,6 @@ them.
 I would use one of those for general agent memory. This protocol is for the case
 where the domain is known and a strong opinion is more useful than a flexible
 one.
-
----
 
 ## What it cost
 
@@ -771,8 +751,6 @@ size.
   at 89% of it without splitting, and nothing told me. Everything else in this
   system that matters is checked mechanically; this isn't, and it should be.
 
----
-
 ## Measuring the protocol itself
 
 Once a protocol is precise enough for a scheduler to execute, it's precise
@@ -787,8 +765,6 @@ and without letting a candidate revision govern the run that produced it.
 
 I think so, and most of the machinery is built and running. That's a later
 post, and it needs real batch data behind it rather than a design document.
-
----
 
 ## Try it
 
