@@ -20,29 +20,30 @@ repositories becomes one operating surface.
 
 #### The product in use
 
-The dashboard keeps the portfolio legible at a glance: repository readiness, live-run state,
-and active-task counts share one operating surface. A waiting run is deliberately more visible
-than an idle one, because it is the place where human attention can unblock the system.
+The dashboard keeps the portfolio legible at a glance: repository readiness, active-task
+counts, recent outcomes, and subscription capacity share one operating surface. The overview
+makes the state of the whole portfolio visible before the operator drills into any one
+repository or run.
 
 <figure style="margin:1.5rem 0;">
-  <img src="{{ '/assets/img/projects/orch-hub-repos-ui.jpg' | relative_url }}"
-       loading="lazy" alt="orch-hub repository dashboard showing readiness, live-run state, and active-task counts"
-       style="display:block;width:100%;border-radius:10px;box-shadow:0 8px 30px rgba(0,0,0,.15);">
+  <img src="{{ '/assets/img/projects/orch-hub-overview-ui.png' | relative_url }}"
+       loading="lazy" alt="orch-hub operations overview showing repository readiness, active tasks, recent outcomes, and subscription capacity"
+       style="display:block;width:100%;max-width:720px;margin:0 auto;border-radius:10px;box-shadow:0 8px 30px rgba(0,0,0,.15);">
   <figcaption style="margin-top:.6rem;color:var(--global-text-color-light);font-size:.9rem;">
-    Portfolio view — ready repositories, bounded task inventories, and a run waiting for input.
+    Operations overview — portfolio readiness, active tasks, recent outcomes, and subscription capacity.
   </figcaption>
 </figure>
 
-When a run reaches a decision boundary, the task view exposes the question in context. The
-operator can discuss a change or give a binding answer from the same phone-first surface; the
-agent continues afterward without turning the whole workflow back into a terminal session.
+Run history stays organized around durable tasks rather than isolated conversations. Each task
+groups the development and review sessions that advanced it while retaining wall-clock time,
+peak context use, launch configuration, and a path to the resulting evaluation.
 
 <figure style="margin:1.5rem 0;">
-  <img src="{{ '/assets/img/projects/orch-hub-approval-ui.jpg' | relative_url }}"
-       loading="lazy" alt="orch-hub task view showing a waiting plan gate with Feedback and Confirm actions"
-       style="display:block;width:100%;border-radius:10px;box-shadow:0 8px 30px rgba(0,0,0,.15);">
+  <img src="{{ '/assets/img/projects/orch-hub-run-history-ui.png' | relative_url }}"
+       loading="lazy" alt="orch-hub run history grouping development and review sessions by durable task with context use and evaluation links"
+       style="display:block;width:100%;max-width:720px;margin:0 auto;border-radius:10px;box-shadow:0 8px 30px rgba(0,0,0,.15);">
   <figcaption style="margin-top:.6rem;color:var(--global-text-color-light);font-size:.9rem;">
-    Human-in-the-loop at the right altitude — review the plan, send feedback, or confirm.
+    Durable run history — task-level grouping, bounded sessions, context use, and evaluation links.
   </figcaption>
 </figure>
 
