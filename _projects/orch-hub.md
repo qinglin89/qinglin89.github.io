@@ -11,12 +11,17 @@ related_publications: false
 orch-hub is a control plane I design and build for my own AI-assisted development. It runs
 resident on my Mac, is operated from a phone over a private network, and coordinates
 per-repository orchestrator programs that drive autonomous dev/review loops over task files.
-The repository is private; this page describes what it is and why it exists.
+The source repository remains private, while a public Apple Silicon binary preview now makes
+the operating experience available without a source checkout.
 
 The protocol those loops actually run is [mandrel](/projects/mandrel/), which is open source.
 The division is deliberate: mandrel is what a single repository runs and is useful on its own,
 with or without a control plane; orch-hub is the layer above it, where a portfolio of
 repositories becomes one operating surface.
+
+[View the binary preview →](https://github.com/qinglin89/orch-hub-releases) ·
+[Watch the 19-second walkthrough →](https://github.com/qinglin89/orch-hub-releases#see-the-workflow) ·
+[View mandrel on GitHub →](https://github.com/qinglin89/mandrel)
 
 #### The product in use
 
@@ -27,10 +32,10 @@ repository or run.
 
 <figure style="margin:1.5rem 0;">
   <img src="{{ '/assets/img/projects/orch-hub-overview-ui.png' | relative_url }}"
-       loading="lazy" alt="orch-hub operations overview showing repository readiness, active tasks, recent outcomes, and subscription capacity"
-       style="display:block;width:100%;max-width:720px;margin:0 auto;border-radius:10px;box-shadow:0 8px 30px rgba(0,0,0,.15);">
+       loading="lazy" alt="orch-hub isolated demo operations overview showing repository readiness, active tasks, recent outcomes, and subscription capacity"
+       style="display:block;width:100%;max-width:900px;margin:0 auto;border-radius:10px;box-shadow:0 8px 30px rgba(0,0,0,.15);">
   <figcaption style="margin-top:.6rem;color:var(--global-text-color-light);font-size:.9rem;">
-    Operations overview — portfolio readiness, active tasks, recent outcomes, and subscription capacity.
+    Isolated demo: portfolio readiness, active tasks, recent outcomes, and subscription capacity.
   </figcaption>
 </figure>
 
@@ -40,12 +45,17 @@ peak context use, launch configuration, and a path to the resulting evaluation.
 
 <figure style="margin:1.5rem 0;">
   <img src="{{ '/assets/img/projects/orch-hub-run-history-ui.png' | relative_url }}"
-       loading="lazy" alt="orch-hub run history grouping development and review sessions by durable task with context use and evaluation links"
-       style="display:block;width:100%;max-width:720px;margin:0 auto;border-radius:10px;box-shadow:0 8px 30px rgba(0,0,0,.15);">
+       loading="lazy" alt="orch-hub isolated demo run history grouping development and review sessions by durable task with context use and evaluation links"
+       style="display:block;width:100%;max-width:900px;margin:0 auto;border-radius:10px;box-shadow:0 8px 30px rgba(0,0,0,.15);">
   <figcaption style="margin-top:.6rem;color:var(--global-text-color-light);font-size:.9rem;">
-    Durable run history — task-level grouping, bounded sessions, context use, and evaluation links.
+    Isolated demo: task-level grouping, bounded sessions, context use, and evaluation links.
   </figcaption>
 </figure>
+
+The public repository distributes preview binaries, installer metadata, screenshots, and the
+walkthrough under explicit preview terms; it is not a source-code mirror. That boundary lets
+people evaluate the control-plane experience while the protocol and its documentation remain
+fully open in mandrel.
 
 #### The unit is a product lifecycle, not a chat session
 
