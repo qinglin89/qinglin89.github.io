@@ -19,8 +19,8 @@ The division is deliberate: mandrel is what a single repository runs and is usef
 with or without a control plane; orch-hub is the layer above it, where a portfolio of
 repositories becomes one operating surface.
 
-[View the binary preview →](https://github.com/qinglin89/orch-hub-releases) ·
-[Watch the 19-second walkthrough →](https://github.com/qinglin89/orch-hub-releases#see-the-workflow) ·
+[View the binary preview →](https://github.com/qinglin89/orch-hub-releases)<br>
+[Watch the 19-second walkthrough →](https://github.com/qinglin89/orch-hub-releases#see-the-workflow)<br>
 [View mandrel on GitHub →](https://github.com/qinglin89/mandrel)
 
 #### The product in use
