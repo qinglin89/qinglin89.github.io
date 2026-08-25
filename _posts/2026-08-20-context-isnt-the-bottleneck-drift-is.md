@@ -20,35 +20,41 @@ spun 22,000 times in fourteen seconds.
 The fix was twenty lines. The question that mattered was the one before it:
 what does this session need to know?
 
-Not "what's in the file" — the agent can read the file. The session needed to
-know that the resync design it was about to delete was deliberate and correct.
-That a previous task had already ruled on it. That the idempotency angle looks
-promising and is a dead end, for reasons that live on the server side. That
-three months earlier someone decided this module family owns its own stall
-detection, so the fix belongs in the main loop, not in the submit path.
+Not "what's in the file" — the agent can read the file. It needed two things
+that were not in the code.
 
-All of it load-bearing, and none of it reachable by reading harder — but for two
-different reasons.
+It needed to know that the resync design it was about to delete was deliberate
+and correct, and that a previous task had already ruled on it.
 
-Most of it is **decisions**: what was chosen, what was rejected, why. Those are
-absent from the artifact. Nobody writes down the design they didn't build, so no
-amount of reasoning over the code recovers them, at any model capability.
+It also needed to know that the idempotency angle — which looks like the obvious
+fix — is a dead end, because the server's cache cannot separate "executed" from
+"confirmed". Nobody decided that. Somebody spent a cross-service investigation
+finding it out.
 
-The idempotency item is a different animal. That one *is* implied by the code —
-read the server's idempotency cache, notice it cannot separate "executed" from
-"confirmed", and you would get there. It is a **conclusion**, and somebody
-already paid for it. Re-deriving it costs a cross-service investigation that no
-session working on a twenty-line retry fix is going to fund.
+Neither is going to come back by reading harder, for different reasons, and
+preserving them buys different things.
 
-There are three common answers to that question, and I have watched all three
-fail.
+The resync **decision** left no trace. Nobody writes down the design they
+didn't build, so no amount of reasoning over the code recovers it, at any
+model capability. Keeping it is what stops a session from being wrong.
+
+The idempotency **conclusion** did leave a trace — it is implied by the code,
+and a session willing to read the server cache would get there. But that is a
+cross-service investigation no twenty-line retry fix is going to fund. Keeping
+it changes where the next session starts: it begins from that conclusion rather
+than from the cache, and the depth behind the conclusion keeps growing while the
+context holding it does not. Over months, that is what makes a project's
+reasoning cumulative instead of repetitive.
+
+There are three common answers to how you keep that around, and I have watched
+all three fail.
 
 **Keep the conversation going.** Long threads, resumed sessions, a context
-window measured in millions. This works until it doesn't, but not because the
-window is full. It fills with the transcript of how you got somewhere while the
-conclusions become harder to find. In my runs, capacity has not been the binding
-constraint; precision has. Fitting more history into the window did not make
-that history more relevant.
+window measured in millions. The window fills with the transcript of how you got
+somewhere while the conclusions become harder to find. In my runs, capacity has
+not been the binding constraint; precision has. And a session that must
+re-derive before it can extend never gets past the first layer, however large
+the window.
 
 **Put it in `CLAUDE.md` / `AGENTS.md` / a memory bank.** Better — now it
 survives the session. But without an admission and removal policy, every one I
@@ -66,24 +72,24 @@ then is everything learned since the initial plan, including decisions that no
 longer appear in the current spec.
 
 The failure mode I kept hitting across all three has a name, and it isn't
-context length. It's **drift**: decision history accumulating without curation
-until neither the human nor the agent can face it. You can feel it happening.
-Sessions get longer. The agent re-derives things it derived last week. You start
-prefacing every prompt with a paragraph of "remember that we decided…".
-Eventually you stop trusting the output and read every diff yourself, which is
-where the productivity you bought disappears.
+context length. It's **drift**: what the project has already worked out
+accumulating without curation until neither the human nor the agent can face it.
+You can feel it happening. Sessions get longer. The agent re-derives things it
+derived last week. You start prefacing every prompt with a paragraph of
+"remember that we decided…". Eventually you stop trusting the output and read
+every diff yourself, which is where the productivity you bought disappears.
 
 **Drift follows project time more than project size.** A large codebase
 generated in a week can carry less drift than a much smaller one iterated over
-two years. What accumulates is not code but the sediment of choices made and
-reversed.
+two years. What accumulates is not code but the sediment of what was settled,
+reversed, and worked out along the way.
 
-And it is why a bigger window is not the fix. The second kind of thing the
-session needed — the conclusion somebody already paid for — is not a note to be
-stored. It is a **starting altitude**: the next session begins reasoning where
-the last one stopped, so the depth behind a conclusion keeps accumulating while
-the context holding it does not. A larger window does not make re-derivation
-free. It only lets you pay for it in one sitting.
+Preserving those two things is not a filing problem. Both have exactly one
+origin — a task that finished and was reviewed — and exactly one consumer: the
+next task, which starts from the memory as it currently stands. Memory without
+the task lifecycle has no admission point and no provenance; the task lifecycle
+without memory starts from zero every time. Neither half works alone, and that
+is why what follows is a workflow rather than a document format.
 
 For the past five months I have been building and running the thing I actually
 wanted. Today I am open-sourcing it as **Mandrel**: an Apache-2.0 protocol and
@@ -105,7 +111,7 @@ The invariant is one line:
 
 > **The working set stays bounded over unbounded project time.**
 
-Day 1 and day 300, a fresh session faces the same *shape* of context: a small
+Day 1 and day 300, a fresh session faces the same _shape_ of context: a small
 constant set of project invariants, one task, and a routed handful of relevant
 documents. The corpus behind it grows. The slice is bounded by the task rather
 than being allowed to grow merely because the project is older.
@@ -117,6 +123,20 @@ Bounded, though, is only half of what matters. The other half is what the set
 contains: the decisions and conclusions from the opening story. The first keeps
 a session from being wrong; the second lets it begin reasoning at a depth it
 could not afford to reach from zero.
+
+I implemented it with three mechanisms: task-scoped growth, selective memory,
+and deterministic control outside the model.
+
+A project evolves task by task. Each task produces both a code change and a memory
+update. Within a task, sessions hand off through the session log.
+Across tasks, the memory system carries what survived. And an orchestrator decides
+what runs next and mechanically checks that it happened.
+
+One principle generates all three: anything that can be decided without model
+reasoning should be guaranteed by deterministic code outside it. The model supplies
+judgment. Everything mechanically checkable — did the entry get written, is the
+status transition legal, is the tree clean — is checked where a persuasive
+explanation cannot waive it.
 
 Two directories carry the project-owned state. **`.ai/`** is curated memory: a
 timeless, version-controlled snapshot of how the system currently is. Ordinary
@@ -199,12 +219,12 @@ structured**: rare by sizing work to fit, structured by specifying exactly what
 a handoff must carry.
 
 Per development entry, three required fields plus the status transition:
-**Done** (what happened — committed changes, decisions made *including rejected
-alternatives and why*, facts learned worth recording), **Next** (remaining
+**Done** (what happened — committed changes, decisions made _including rejected
+alternatives and why_, facts learned worth recording), **Next** (remaining
 work), and **Open** (unresolved questions). **Plan-slice** is optional. Review
 entries instead carry **Verdict**, **Group**, and **Findings**.
 
-The one that earns its keep is *rejected alternatives*. Here is the actual
+The one that earns its keep is _rejected alternatives_. Here is the actual
 Scope from that retry-loop task — lightly anonymized, otherwise as written:
 
 ```markdown
@@ -250,7 +270,7 @@ working set be bounded without history being thrown away.** The snapshot stays
 timeless because the archive is allowed to be temporal — everything that was
 true only for a while, every rejected route not durable enough to admit, every
 review verdict, is still there, just demoted out of what a session loads by
-default. Bounded means *demoted*, not *discarded*, and those are very different
+default. Bounded means _demoted_, not _discarded_, and those are very different
 promises to make about a project you intend to work on for a year.
 
 That archive turns out to earn its keep in a second way I did not build it for.
@@ -281,17 +301,17 @@ I initially thought this was pointless ceremony. It is now one of the rules
 I'd defend hardest, because **a mid-task session is the worst possible author of
 durable knowledge.** Its model of the work is local, partial, and still
 changing; what it believes at hour two may be wrong by hour five. Deferring the
-write to completion means what gets absorbed is a *finished* understanding,
+write to completion means what gets absorbed is a _finished_ understanding,
 written by a reader of the whole arc rather than a participant in one leg of
 it.
 
 **Second half: a fact must pass three tests to get in.**
 
-| Test | Passes when |
-|---|---|
+| Test                | Passes when                                                                              |
+| ------------------- | ---------------------------------------------------------------------------------------- |
 | **Derivation cost** | Re-deriving it requires multi-file traversal, cross-module reasoning, or git archaeology |
-| **Stability** | It stays true across iterations without re-verification |
-| **Leverage** | Knowing it changes the agent's next action |
+| **Stability**       | It stays true across iterations without re-verification                                  |
+| **Leverage**        | Knowing it changes the agent's next action                                               |
 
 A clear failure on any test keeps the fact out. If none clearly fails but one is
 borderline, compress it to a single keyword-dense line and keep it. Don't
@@ -308,11 +328,11 @@ What passes: invariants, topology, non-obvious couplings, anti-patterns,
 vocabulary, **intentional omissions**, runtime dispatch paths that static
 reading won't reveal.
 
-*Intentional omissions* need special treatment because they are nearly
+_Intentional omissions_ need special treatment because they are nearly
 impossible to recover from code: absence leaves no trace. An
 agent cannot distinguish "there is no cache here because it's deliberate" from
 "there is no cache here because nobody got to it," and it will helpfully add
-the cache. A snapshot recording the *why* of an absence buys something no
+the cache. A snapshot recording the _why_ of an absence buys something no
 amount of reading can reconstruct.
 
 Here is a real entry from Mandrel's own design document — this example switches
@@ -400,7 +420,7 @@ dispatch and checks that do not require it.
 
 ### Caller anonymity keeps execution interchangeable
 
-My first version wrote the protocol *for the scheduler*: role documents named
+My first version wrote the protocol _for the scheduler_: role documents named
 what another session would do, prompts restated rules, and flow state lived in
 the caller. It stopped working when I ran a session by hand.
 
@@ -431,13 +451,13 @@ are not checked decay.
 The protocol is enforced through five layers. They differ in whether the rule is
 interpreted by the model or checked outside it.
 
-| Layer | Where it runs | What it catches |
-|---|---|---|
-| **Protocol docs** — conduct, schemas, project invariants | ambient in the model's context | a decision made without the invariants in view |
-| **Role contract** — dev, review, or plan, delivered at invocation | activation prompt; the role-specific imperative contract | doing a different job than the one asked for |
-| **Skills** — packaged procedures (intake, closeout, housekeeping) | the model invokes them | a multi-step procedure done from memory and half-right |
-| **Hooks** — session start and stop, in the agent's own runtime | **outside the model** | a dirty tree after a declared handoff or completion; context-budget wrap-up |
-| **Orchestrator** — prompt assembly, output verification, budgets | **outside the model** | missing or illegal task-file outputs; a loop that will not converge |
+| Layer                                                             | Where it runs                                            | What it catches                                                             |
+| ----------------------------------------------------------------- | -------------------------------------------------------- | --------------------------------------------------------------------------- |
+| **Protocol docs** — conduct, schemas, project invariants          | ambient in the model's context                           | a decision made without the invariants in view                              |
+| **Role contract** — dev, review, or plan, delivered at invocation | activation prompt; the role-specific imperative contract | doing a different job than the one asked for                                |
+| **Skills** — packaged procedures (intake, closeout, housekeeping) | the model invokes them                                   | a multi-step procedure done from memory and half-right                      |
+| **Hooks** — session start and stop, in the agent's own runtime    | **outside the model**                                    | a dirty tree after a declared handoff or completion; context-budget wrap-up |
+| **Orchestrator** — prompt assembly, output verification, budgets  | **outside the model**                                    | missing or illegal task-file outputs; a loop that will not converge         |
 
 The top three are semantic: they work by being read and understood. The bottom
 two execute checks outside the model. Their recovery actions may still require
@@ -583,8 +603,8 @@ This is deliberately narrower, and the narrowness is the point. **Because it
 only has to serve one lifecycle — software work, moving from decision to
 implementation to review to closeout — it can hold opinions a general system
 cannot assume by default.** Without project-specific policy, a domain-agnostic
-layer does not know that *rejected alternatives* are worth more than function
-signatures, that *intentional omissions* are unusually expensive to recover, or
+layer does not know that _rejected alternatives_ are worth more than function
+signatures, that _intentional omissions_ are unusually expensive to recover, or
 that a finding set should freeze at first review. Those are not retrieval
 improvements. They are claims about what matters in this domain.
 
@@ -597,11 +617,11 @@ one.
 These measurements were taken after five months, across four repositories and
 **286 completed tasks.**
 
-| | |
-|---|---|
-| Largest project | ~122k lines of Go, 150 tasks |
-| Sessions per task | 3.8 average, development and review combined |
-| Full snapshot corpus, largest project | ~34k words, split into sub-documents twice |
+|                                       |                                              |
+| ------------------------------------- | -------------------------------------------- |
+| Largest project                       | ~122k lines of Go, 150 tasks                 |
+| Sessions per task                     | 3.8 average, development and review combined |
+| Full snapshot corpus, largest project | ~34k words, split into sub-documents twice   |
 
 **The flagship project was not greenfield.** Its first commit predates `.ai/` by
 ten months; the snapshot was derived from a repository that already had 119 Go
